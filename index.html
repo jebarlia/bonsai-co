@@ -1,0 +1,1127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bonsai Co. — Your AI Concierge</title>
+<meta name="description" content="Bonsai Co. is an AI concierge service that helps everyday people set up personal AI agents. Improve the quality of your life.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300;1,9..40,400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+/* ===== RESET & BASE ===== */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --black: #0a0a0a;
+  --cream: #f5f0e8;
+  --white: #fafafa;
+  --soft: #e8e2d8;
+  --dark: #111110;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 400;
+  color: var(--black);
+  background: var(--black);
+  overflow-x: hidden;
+}
+
+/* ===== GRAIN OVERLAY ===== */
+.grain {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1000;
+  opacity: 0.02;
+}
+
+/* ===== NAVIGATION ===== */
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
+  mix-blend-mode: difference;
+  padding: 24px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav-logo {
+  font-family: 'Instrument Serif', serif;
+  font-size: 20px;
+  color: #fff;
+  text-decoration: none;
+  letter-spacing: -0.01em;
+}
+
+.nav-links {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 36px;
+  list-style: none;
+}
+
+.nav-links a {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #fff;
+  text-decoration: none;
+  transition: opacity 0.3s ease;
+}
+
+.nav-links a:hover {
+  opacity: 0.6;
+}
+
+.nav-cta {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  color: #fff;
+  background: transparent;
+  border: 1px solid #fff;
+  padding: 10px 22px;
+  border-radius: 0;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.3s cubic-bezier(0.16, 1, 0.3, 1), color 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.nav-cta:hover {
+  background: #fff;
+  color: #000;
+}
+
+/* ===== CROSSFADE STORY ===== */
+.crossfade-wrap {
+  position: relative;
+  width: 100%;
+}
+
+.crossfade-viewport {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  width: 100%;
+}
+
+.cf-slide {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 40px 28px;
+  opacity: 0;
+  will-change: opacity;
+}
+
+.cf-slide:first-child {
+  opacity: 1;
+}
+
+.cf-label {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 20px;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cf-headline {
+  font-family: 'Instrument Serif', serif;
+  font-weight: 400;
+  font-size: clamp(32px, 6vw, 74px);
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+  max-width: 820px;
+  opacity: 0;
+  transform: translateY(36px);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cf-slide--hero .cf-headline {
+  font-size: clamp(42px, 8.5vw, 104px);
+}
+
+.cf-headline .period {
+  font-style: italic;
+  opacity: 0.4;
+}
+
+.cf-sub {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 300;
+  font-size: clamp(14px, 2vw, 17px);
+  line-height: 1.6;
+  opacity: 0;
+  transform: translateY(16px);
+  max-width: 580px;
+  margin-top: 22px;
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.1s, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.1s;
+}
+
+.cf-slide.active .cf-label {
+  opacity: 0.5;
+  transform: translateY(0);
+}
+
+.cf-slide.active .cf-headline {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.cf-slide.active .cf-sub {
+  opacity: 0.5;
+  transform: translateY(0);
+}
+
+/* Scroll hint */
+.scroll-hint {
+  position: absolute;
+  bottom: 48px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  transition: opacity 0.6s ease;
+}
+
+.scroll-hint-label {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  opacity: 0.4;
+  color: var(--cream);
+}
+
+.scroll-hint-line {
+  width: 1px;
+  height: 40px;
+  background: var(--cream);
+  opacity: 0.3;
+  transform-origin: top;
+  animation: scrollLine 2s ease-in-out infinite;
+}
+
+@keyframes scrollLine {
+  0% { transform: scaleY(0); }
+  50% { transform: scaleY(1); }
+  100% { transform: scaleY(0); transform-origin: bottom; }
+}
+
+/* ===== SECTION SHARED ===== */
+.section {
+  padding: 120px 40px;
+}
+
+.section-label {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.4;
+  margin-bottom: 16px;
+}
+
+.section-title {
+  font-family: 'Instrument Serif', serif;
+  font-weight: 400;
+  font-size: clamp(32px, 5vw, 56px);
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+  margin-bottom: 18px;
+}
+
+.section-intro {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 300;
+  font-size: clamp(14px, 1.8vw, 16px);
+  line-height: 1.65;
+  opacity: 0.5;
+  max-width: 600px;
+}
+
+/* ===== USE CASES ===== */
+.use-cases {
+  background: var(--cream);
+}
+
+.use-cases-header {
+  max-width: 1080px;
+  margin: 0 auto 56px;
+}
+
+.use-cases-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 14px;
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+.uc-card {
+  background: var(--white);
+  padding: 32px 28px;
+  border-radius: 0;
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.uc-card.vis {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.uc-icon {
+  font-size: 22px;
+  margin-bottom: 16px;
+  display: block;
+}
+
+.uc-title {
+  font-family: 'Instrument Serif', serif;
+  font-weight: 400;
+  font-size: 20px;
+  margin-bottom: 10px;
+  letter-spacing: -0.01em;
+}
+
+.uc-desc {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 300;
+  font-size: 13px;
+  line-height: 1.6;
+  opacity: 0.5;
+}
+
+/* ===== HOW IT WORKS ===== */
+.process {
+  background: var(--white);
+}
+
+.process-header {
+  text-align: center;
+  margin-bottom: 72px;
+}
+
+.process-steps {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  max-width: 940px;
+  margin: 0 auto;
+  gap: 0;
+}
+
+.step {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 0 20px;
+  position: relative;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.step.vis {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.step-top {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 24px;
+}
+
+.step-line-before,
+.step-line-after {
+  flex: 1;
+  height: 1px;
+  background: rgba(10, 10, 10, 0.08);
+}
+
+.step:first-child .step-line-before,
+.step:last-child .step-line-after {
+  background: transparent;
+}
+
+.step-number {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 1px solid rgba(10, 10, 10, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Instrument Serif', serif;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.step-title {
+  font-family: 'Instrument Serif', serif;
+  font-weight: 400;
+  font-size: 20px;
+  margin-bottom: 10px;
+  letter-spacing: -0.01em;
+}
+
+.step-desc {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 300;
+  font-size: 13px;
+  line-height: 1.55;
+  opacity: 0.4;
+  max-width: 200px;
+  margin-bottom: 14px;
+}
+
+.step-time {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  opacity: 0.2;
+}
+
+/* ===== PRICING ===== */
+.pricing {
+  background: var(--cream);
+}
+
+.pricing-header {
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto 56px;
+}
+
+.pricing-header .section-intro {
+  margin: 0 auto;
+}
+
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  gap: 14px;
+  max-width: 940px;
+  margin: 0 auto;
+}
+
+.price-card {
+  background: var(--white);
+  padding: 40px 32px;
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.price-card.vis {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.price-card--featured {
+  background: var(--black);
+  color: var(--cream);
+}
+
+.price-name {
+  font-family: 'Instrument Serif', serif;
+  font-weight: 400;
+  font-size: 28px;
+  margin-bottom: 12px;
+  letter-spacing: -0.015em;
+}
+
+.price-desc {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 1.6;
+  opacity: 0.5;
+  margin-bottom: 28px;
+}
+
+.price-plus {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 400;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  opacity: 0.35;
+  margin-bottom: 16px;
+}
+
+.price-features {
+  list-style: none;
+  margin-bottom: 36px;
+  flex: 1;
+}
+
+.price-features li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 1.5;
+  padding: 7px 0;
+}
+
+.price-check {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  border: 1px solid rgba(10, 10, 10, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.price-card--featured .price-check {
+  border-color: rgba(245, 240, 232, 0.2);
+}
+
+.price-check svg {
+  width: 8px;
+  height: 8px;
+}
+
+.price-check svg path {
+  stroke: var(--black);
+}
+
+.price-card--featured .price-check svg path {
+  stroke: var(--cream);
+}
+
+.price-btn {
+  display: inline-block;
+  text-align: center;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  padding: 14px 28px;
+  border: 1px solid var(--black);
+  background: transparent;
+  color: var(--black);
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.3s cubic-bezier(0.16, 1, 0.3, 1), color 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.price-btn:hover {
+  background: var(--black);
+  color: var(--cream);
+}
+
+.price-card--featured .price-btn {
+  border-color: var(--cream);
+  color: var(--cream);
+}
+
+.price-card--featured .price-btn:hover {
+  background: var(--cream);
+  color: var(--black);
+}
+
+/* ===== CTA ===== */
+.cta {
+  background: var(--black);
+  color: var(--cream);
+  text-align: center;
+  padding: 140px 40px;
+}
+
+.cta .section-label {
+  opacity: 0.35;
+}
+
+.cta .section-intro {
+  margin: 0 auto 40px;
+}
+
+.cta-btn {
+  display: inline-block;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  padding: 16px 32px;
+  border: 1px solid var(--cream);
+  background: transparent;
+  color: var(--cream);
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.3s cubic-bezier(0.16, 1, 0.3, 1), color 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cta-btn:hover {
+  background: var(--cream);
+  color: var(--black);
+}
+
+/* ===== FOOTER ===== */
+.footer {
+  background: var(--black);
+  color: var(--cream);
+  padding: 48px 40px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  border-top: 1px solid rgba(245, 240, 232, 0.06);
+}
+
+.footer-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.footer-logo {
+  font-family: 'Instrument Serif', serif;
+  font-size: 18px;
+}
+
+.footer-sub {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 300;
+  opacity: 0.35;
+}
+
+.footer-links {
+  display: flex;
+  gap: 28px;
+  list-style: none;
+}
+
+.footer-links a {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--cream);
+  text-decoration: none;
+  opacity: 0.4;
+  transition: opacity 0.3s ease;
+}
+
+.footer-links a:hover {
+  opacity: 1;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .nav {
+    padding: 20px 24px;
+  }
+
+  .nav-links {
+    display: none;
+  }
+
+  .section {
+    padding: 80px 24px;
+  }
+
+  .process-steps {
+    flex-direction: column;
+    align-items: center;
+    gap: 48px;
+  }
+
+  .step-top {
+    justify-content: center;
+  }
+
+  .step-line-before,
+  .step-line-after {
+    display: none;
+  }
+
+  .step {
+    padding: 0;
+  }
+
+  .step-desc {
+    max-width: 280px;
+  }
+
+  .use-cases-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .pricing-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cta {
+    padding: 100px 24px;
+  }
+
+  .footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 32px;
+    padding: 40px 24px;
+  }
+
+  .footer-links {
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- Grain overlay -->
+<svg class="grain" xmlns="http://www.w3.org/2000/svg">
+  <filter id="grain-filter">
+    <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/>
+  </filter>
+  <rect width="100%" height="100%" filter="url(#grain-filter)"/>
+</svg>
+
+<!-- Navigation -->
+<nav class="nav">
+  <a href="#" class="nav-logo">Bonsai Co.</a>
+  <ul class="nav-links">
+    <li><a href="#use-cases">Use Cases</a></li>
+    <li><a href="#process">Process</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+  </ul>
+  <a href="#cta" class="nav-cta">Get Started</a>
+</nav>
+
+<!-- Section 1: Crossfade Story -->
+<div class="crossfade-wrap" id="crossfade-wrap">
+  <div class="crossfade-viewport">
+
+    <!-- Slide 0: Hero -->
+    <div class="cf-slide cf-slide--hero active" style="background:var(--black);color:var(--cream);">
+      <span class="cf-label">Your AI Concierge</span>
+      <h1 class="cf-headline">Improve the quality of your life<span class="period">.</span></h1>
+      <div class="scroll-hint" id="scroll-hint">
+        <span class="scroll-hint-label">Scroll</span>
+        <div class="scroll-hint-line"></div>
+      </div>
+    </div>
+
+    <!-- Slide 1 -->
+    <div class="cf-slide" style="background:var(--cream);color:var(--black);">
+      <h2 class="cf-headline">Every week there's a new AI tool you're supposed to be using<span class="period">.</span></h2>
+      <p class="cf-sub">New platforms. New promises. The noise never stops — and it's exhausting.</p>
+    </div>
+
+    <!-- Slide 2 -->
+    <div class="cf-slide" style="background:var(--dark);color:var(--cream);">
+      <h2 class="cf-headline">You don't have time to become an AI expert<span class="period">.</span></h2>
+      <p class="cf-sub">You're running a business. Raising a family. Living a life. You shouldn't need a CS degree to save ten hours a week.</p>
+    </div>
+
+    <!-- Slide 3 -->
+    <div class="cf-slide" style="background:var(--soft);color:var(--black);">
+      <h2 class="cf-headline">It's hard to trust what you don't understand<span class="period">.</span></h2>
+      <p class="cf-sub">Where does your data go? Will it actually work? What would you even use it for? These aren't dumb questions — they're the right ones.</p>
+    </div>
+
+    <!-- Slide 4 -->
+    <div class="cf-slide" style="background:var(--dark);color:var(--cream);">
+      <h2 class="cf-headline">The gap between those who adopt — and those who don't — is growing<span class="period">.</span></h2>
+      <p class="cf-sub">You don't need to figure this out alone.</p>
+    </div>
+
+    <!-- Slide 5 -->
+    <div class="cf-slide" style="background:var(--cream);color:var(--black);">
+      <h2 class="cf-headline">We're real people who build it with you — not for you<span class="period">.</span></h2>
+      <p class="cf-sub">Think of us as your AI concierge. A human always in the loop — translating what's possible into what's practical for your life.</p>
+    </div>
+
+    <!-- Slide 6 -->
+    <div class="cf-slide" style="background:var(--dark);color:var(--cream);">
+      <h2 class="cf-headline">We find your leverage and build the agents that give you your time back<span class="period">.</span></h2>
+      <p class="cf-sub">Custom AI agents designed around your real life — your routines, your pain points, your goals.</p>
+    </div>
+
+    <!-- Slide 7 -->
+    <div class="cf-slide" style="background:var(--white);color:var(--black);">
+      <h2 class="cf-headline">The future is here<span class="period">.</span></h2>
+      <p class="cf-sub">It should improve the quality of your life — not complicate it.</p>
+    </div>
+
+  </div>
+</div>
+
+<!-- Section 2: Use Cases -->
+<section class="section use-cases" id="use-cases">
+  <div class="use-cases-header">
+    <p class="section-label">What people build</p>
+    <h2 class="section-title">Stop doing the things you don't want to do</h2>
+    <p class="section-intro">Your life is full of repetitive tasks you don't enjoy, don't have time for, and don't have to do anymore. Let an agent handle them so you can focus on what actually matters to you.</p>
+  </div>
+  <div class="use-cases-grid">
+    <div class="uc-card">
+      <span class="uc-icon">&#x1F4C4;</span>
+      <h3 class="uc-title">Document management</h3>
+      <p class="uc-desc">One system to store, organize, and search all your personal documents — tax returns, warranties, school forms, medical records.</p>
+    </div>
+    <div class="uc-card">
+      <span class="uc-icon">&#x1F4DA;</span>
+      <h3 class="uc-title">Homework help</h3>
+      <p class="uc-desc">A patient tutor for your kids that explains things in ways they understand — and tells you where they're stuck.</p>
+    </div>
+    <div class="uc-card">
+      <span class="uc-icon">&#x1F48A;</span>
+      <h3 class="uc-title">Health & appointments</h3>
+      <p class="uc-desc">Tracks medications, doctor's visits, and insurance for you or aging parents — reminds you before anything slips.</p>
+    </div>
+    <div class="uc-card">
+      <span class="uc-icon">&#x1F4B0;</span>
+      <h3 class="uc-title">Budget tracking</h3>
+      <p class="uc-desc">Monitors spending, flags unusual charges, and gives you a plain-English summary of where your money's going.</p>
+    </div>
+    <div class="uc-card">
+      <span class="uc-icon">&#x2708;&#xFE0F;</span>
+      <h3 class="uc-title">Travel planning</h3>
+      <p class="uc-desc">Tell it where you want to go. It researches flights, hotels, and builds a day-by-day itinerary you'll actually use.</p>
+    </div>
+    <div class="uc-card">
+      <span class="uc-icon">&#x1F3E0;</span>
+      <h3 class="uc-title">Home management</h3>
+      <p class="uc-desc">Coordinating repairs, comparing insurance quotes, remembering when to change the filter — it just handles it.</p>
+    </div>
+    <div class="uc-card">
+      <span class="uc-icon">&#x1F50D;</span>
+      <h3 class="uc-title">Research</h3>
+      <p class="uc-desc">Comparing schools, finding the best pediatrician, understanding a new diagnosis — get clear answers in minutes, not hours.</p>
+    </div>
+    <div class="uc-card">
+      <span class="uc-icon">&#x1F5D3;&#xFE0F;</span>
+      <h3 class="uc-title">Schedule management</h3>
+      <p class="uc-desc">Soccer practice, dentist appointments, date night — an agent that keeps your family's calendar organized and conflict-free.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Section 3: How It Works -->
+<section class="section process" id="process">
+  <div class="process-header">
+    <p class="section-label">Process</p>
+    <h2 class="section-title">How it works</h2>
+  </div>
+  <div class="process-steps">
+    <div class="step">
+      <div class="step-top">
+        <div class="step-line-before"></div>
+        <div class="step-number">1</div>
+        <div class="step-line-after"></div>
+      </div>
+      <h3 class="step-title">Explore</h3>
+      <p class="step-desc">A free conversation to understand your world and where AI might fit.</p>
+      <span class="step-time">15 min &middot; Free</span>
+    </div>
+    <div class="step">
+      <div class="step-top">
+        <div class="step-line-before"></div>
+        <div class="step-number">2</div>
+        <div class="step-line-after"></div>
+      </div>
+      <h3 class="step-title">Analyze</h3>
+      <p class="step-desc">We map your routines and find the highest-leverage opportunities.</p>
+      <span class="step-time">30&ndash;45 min</span>
+    </div>
+    <div class="step">
+      <div class="step-top">
+        <div class="step-line-before"></div>
+        <div class="step-number">3</div>
+        <div class="step-line-after"></div>
+      </div>
+      <h3 class="step-title">Build</h3>
+      <p class="step-desc">We design and deploy custom agents, with you in the loop at every step.</p>
+      <span class="step-time">1&ndash;2 weeks</span>
+    </div>
+    <div class="step">
+      <div class="step-top">
+        <div class="step-line-before"></div>
+        <div class="step-number">4</div>
+        <div class="step-line-after"></div>
+      </div>
+      <h3 class="step-title">Maintain</h3>
+      <p class="step-desc">Ongoing optimization, support, and new agents as your life evolves.</p>
+      <span class="step-time">Monthly</span>
+    </div>
+  </div>
+</section>
+
+<!-- Section 4: Pricing -->
+<section class="section pricing" id="pricing">
+  <div class="pricing-header">
+    <p class="section-label">Pricing</p>
+    <h2 class="section-title">Find your plan</h2>
+    <p class="section-intro">Choose the level of support and capability that fits how you work. All plans include a one-time setup to design and deploy your personal AI agents.</p>
+  </div>
+  <div class="pricing-grid">
+
+    <!-- Seed -->
+    <div class="price-card">
+      <h3 class="price-name">Seed</h3>
+      <p class="price-desc">For individuals getting started with a focused, high-impact agent.</p>
+      <ul class="price-features">
+        <li>
+          <span class="price-check"><svg viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 5.5L4 7.5L8 3" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          One-time agent setup &amp; configuration
+        </li>
+        <li>
+          <span class="price-check"><svg viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 5.5L4 7.5L8 3" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          1 custom AI agent
+        </li>
+        <li>
+          <span class="price-check"><svg viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 5.5L4 7.5L8 3" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          Monthly optimization &amp; tuning
+        </li>
+        <li>
+          <span class="price-check"><svg viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 5.5L4 7.5L8 3" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          Email support
+        </li>
+      </ul>
+      <a href="mailto:hello@bonsai.co" class="price-btn">Book a call</a>
+    </div>
+
+    <!-- Growth (Featured) -->
+    <div class="price-card price-card--featured">
+      <h3 class="price-name">Growth</h3>
+      <p class="price-desc">For individuals ready to deploy multiple connected agents.</p>
+      <p class="price-plus">Everything in Seed, plus:</p>
+      <ul class="price-features">
+        <li>
+          <span class="price-check"><svg viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 5.5L4 7.5L8 3" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          Up to 5 custom AI agents
+        </li>
+        <li>
+          <span class="price-check"><svg viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 5.5L4 7.5L8 3" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          Bi-weekly optimization &amp; refinement
+        </li>
+        <li>
+          <span class="price-check"><svg viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 5.5L4 7.5L8 3" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          Priority support
+        </li>
+      </ul>
+      <a href="mailto:hello@bonsai.co" class="price-btn">Book a call</a>
+    </div>
+
+    <!-- Canopy -->
+    <div class="price-card">
+      <h3 class="price-name">Canopy</h3>
+      <p class="price-desc">For individuals embedding AI across their workflows and routines.</p>
+      <p class="price-plus">Everything in Growth, plus:</p>
+      <ul class="price-features">
+        <li>
+          <span class="price-check"><svg viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 5.5L4 7.5L8 3" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          Expanded agent architecture
+        </li>
+        <li>
+          <span class="price-check"><svg viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 5.5L4 7.5L8 3" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          Weekly strategy &amp; optimization sessions
+        </li>
+        <li>
+          <span class="price-check"><svg viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 5.5L4 7.5L8 3" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          Dedicated support &amp; advisory access
+        </li>
+      </ul>
+      <a href="mailto:hello@bonsai.co" class="price-btn">Book a call</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- Section 5: CTA -->
+<section class="section cta" id="cta">
+  <p class="section-label">Let's begin</p>
+  <h2 class="section-title">Ready to start?</h2>
+  <p class="section-intro">15 minutes. No pitch. Just a human conversation about what AI can do for your life.</p>
+  <a href="mailto:hello@bonsai.co" class="cta-btn">Book your free call</a>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-brand">
+    <span class="footer-logo">Bonsai Co.</span>
+    <span class="footer-sub">Your AI concierge.</span>
+  </div>
+  <ul class="footer-links">
+    <li><a href="#use-cases">Use Cases</a></li>
+    <li><a href="#process">Process</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="mailto:hello@bonsai.co">Contact</a></li>
+  </ul>
+</footer>
+
+<script>
+(function() {
+  "use strict";
+
+  // ===== CROSSFADE SCROLL SYSTEM =====
+  var wrap = document.getElementById("crossfade-wrap");
+  var viewport = wrap.querySelector(".crossfade-viewport");
+  var slides = viewport.querySelectorAll(".cf-slide");
+  var numSlides = slides.length;
+  var scrollHint = document.getElementById("scroll-hint");
+  var ticking = false;
+
+  // Set wrapper height
+  wrap.style.height = (numSlides * 100) + "vh";
+
+  function updateCrossfade() {
+    var wrapRect = wrap.getBoundingClientRect();
+    var wrapTop = -wrapRect.top;
+    var wrapHeight = wrap.offsetHeight - window.innerHeight;
+
+    if (wrapHeight <= 0) return;
+
+    var progress = Math.max(0, Math.min(1, wrapTop / wrapHeight));
+    var slideProgress = progress * (numSlides - 1);
+    var currentIndex = Math.floor(slideProgress);
+    var blend = slideProgress - currentIndex;
+
+    // Scroll hint fade
+    if (scrollHint) {
+      var hintOpacity = 1 - Math.min(1, progress * 5);
+      scrollHint.style.opacity = hintOpacity;
+    }
+
+    for (var i = 0; i < numSlides; i++) {
+      var opacity = 0;
+
+      if (i === currentIndex) {
+        opacity = 1 - blend;
+      } else if (i === currentIndex + 1) {
+        opacity = blend;
+      }
+
+      slides[i].style.opacity = opacity;
+
+      if (opacity > 0.3) {
+        if (!slides[i].classList.contains("active")) {
+          slides[i].classList.add("active");
+        }
+      } else {
+        slides[i].classList.remove("active");
+      }
+    }
+
+    ticking = false;
+  }
+
+  function onScroll() {
+    if (!ticking) {
+      ticking = true;
+      requestAnimationFrame(updateCrossfade);
+    }
+  }
+
+  window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener("touchmove", onScroll, { passive: true });
+
+  // Initial state
+  updateCrossfade();
+
+  // ===== INTERSECTION OBSERVER FOR CARDS/STEPS =====
+  var animTargets = document.querySelectorAll(".uc-card, .step, .price-card");
+
+  if ("IntersectionObserver" in window) {
+    var observer = new IntersectionObserver(function(entries) {
+      for (var j = 0; j < entries.length; j++) {
+        if (entries[j].isIntersecting) {
+          var el = entries[j].target;
+          // Find sibling index for stagger
+          var parent = el.parentNode;
+          var siblings = parent.querySelectorAll(el.tagName + "." + el.classList[0]);
+          var idx = 0;
+          for (var k = 0; k < siblings.length; k++) {
+            if (siblings[k] === el) { idx = k; break; }
+          }
+          el.style.transitionDelay = (idx * 90) + "ms";
+          el.classList.add("vis");
+          observer.unobserve(el);
+        }
+      }
+    }, { threshold: 0.15 });
+
+    for (var i = 0; i < animTargets.length; i++) {
+      observer.observe(animTargets[i]);
+    }
+  } else {
+    // Fallback: show everything
+    for (var f = 0; f < animTargets.length; f++) {
+      animTargets[f].classList.add("vis");
+    }
+  }
+
+  // ===== SMOOTH SCROLL FOR NAV LINKS =====
+  var navLinks = document.querySelectorAll('a[href^="#"]');
+  for (var n = 0; n < navLinks.length; n++) {
+    navLinks[n].addEventListener("click", function(e) {
+      var href = this.getAttribute("href");
+      if (href === "#") return;
+      var target = document.querySelector(href);
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: "smooth" });
+      }
+    });
+  }
+})();
+</script>
+</body>
+</html>
